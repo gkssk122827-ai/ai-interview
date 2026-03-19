@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -44,18 +45,31 @@ public class InterviewSession extends BaseTimeEntity {
     @Column(nullable = false, length = 100)
     private String positionTitle;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private InterviewMode mode;
+
+    private Long applicationDocumentId;
+
     private Long resumeId;
 
     private Long coverLetterId;
 
     private Long jobPostingId;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String applicationDocumentSnapshot;
+
+    @Lob
     @Column(columnDefinition = "TEXT")
     private String resumeSnapshot;
 
+    @Lob
     @Column(columnDefinition = "TEXT")
     private String coverLetterSnapshot;
 
+    @Lob
     @Column(columnDefinition = "TEXT")
     private String jobPostingSnapshot;
 
@@ -79,9 +93,12 @@ public class InterviewSession extends BaseTimeEntity {
             User user,
             String title,
             String positionTitle,
+            InterviewMode mode,
+            Long applicationDocumentId,
             Long resumeId,
             Long coverLetterId,
             Long jobPostingId,
+            String applicationDocumentSnapshot,
             String resumeSnapshot,
             String coverLetterSnapshot,
             String jobPostingSnapshot,
@@ -91,9 +108,12 @@ public class InterviewSession extends BaseTimeEntity {
         this.user = user;
         this.title = title;
         this.positionTitle = positionTitle;
+        this.mode = mode;
+        this.applicationDocumentId = applicationDocumentId;
         this.resumeId = resumeId;
         this.coverLetterId = coverLetterId;
         this.jobPostingId = jobPostingId;
+        this.applicationDocumentSnapshot = applicationDocumentSnapshot;
         this.resumeSnapshot = resumeSnapshot;
         this.coverLetterSnapshot = coverLetterSnapshot;
         this.jobPostingSnapshot = jobPostingSnapshot;
@@ -112,5 +132,17 @@ public class InterviewSession extends BaseTimeEntity {
 
     public void assignFeedback(InterviewFeedback feedback) {
         this.feedback = feedback;
+    }
+
+    public int getTotalQuestionCount() {
+        return questions.size();
+    }
+
+    public int getAnsweredQuestionCount() {
+        return (int) questions.stream()
+                .filter(question -> question.getAnswer() != null
+                        && question.getAnswer().getAnswerText() != null
+                        && !question.getAnswer().getAnswerText().isBlank())
+                .count();
     }
 }
