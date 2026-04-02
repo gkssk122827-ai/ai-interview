@@ -64,12 +64,13 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $REGISTRY
-            docker network create aimentor-net || true
-            docker pull $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-            docker stop aimentor-backend || true
-            docker rm aimentor-backend || true
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            docker login --username AWS --password-stdin $REGISTRY &&
+            docker network create aimentor-net || true &&
+            docker pull $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG &&
+            docker stop aimentor-backend || true &&
+            docker rm aimentor-backend || true &&
             docker run -d \
               --name aimentor-backend \
               --restart unless-stopped \
@@ -83,4 +84,5 @@ jobs:
               -e SPEECH_PROVIDER=python \
               -e AI_SERVER_URL='http://aimentor-ai-server:8000' \
               $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          "
           EOF
