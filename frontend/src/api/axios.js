@@ -1,8 +1,17 @@
 import axios from 'axios'
 import { dispatchAuthCleared } from '../utils/userScopedStorage'
 
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+
+export function buildApiUrl(path) {
+  if (!API_BASE_URL) {
+    return path
+  }
+  return `${API_BASE_URL}${path}`
+}
+
 const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: API_BASE_URL,
 })
 
 // 요청 인터셉터: Authorization 헤더 자동 추가
@@ -46,7 +55,7 @@ api.interceptors.response.use(
       if (!refreshPromise) {
         const refreshToken = localStorage.getItem('refreshToken')
         refreshPromise = axios
-          .post('http://localhost:8080/api/v1/auth/refresh', { refreshToken })
+          .post(buildApiUrl('/api/v1/auth/refresh'), { refreshToken })
           .then(({ data }) => {
             const newToken = data.data.accessToken
             localStorage.setItem('accessToken', newToken)
