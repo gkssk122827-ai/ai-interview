@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - develop
+      - dev
     paths:
       - 'frontend/**'
       - '.github/workflows/frontend-deploy.yml'
