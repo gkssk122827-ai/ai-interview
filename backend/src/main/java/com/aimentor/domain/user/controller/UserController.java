@@ -32,6 +32,7 @@ public class UserController {
         return ApiResponse.success(userService.updateProfile(auth.userId(), request));
     }
 
+
     @GetMapping("/me/widgets")
     public ApiResponse<String> getWidgetConfig(
             @AuthenticationPrincipal AuthenticatedUser auth) {
