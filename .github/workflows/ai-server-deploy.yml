@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - develop
+      - dev
     paths:
       - 'ai-server/**'
       - '.github/workflows/ai-server-deploy.yml'
