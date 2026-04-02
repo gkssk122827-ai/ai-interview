@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - develop
+      - dev
     paths:
       - 'backend/**'
       - '.github/workflows/backend-deploy.yml'
