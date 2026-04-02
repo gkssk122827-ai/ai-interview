@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mariadb://${DB_HOST:di-interview-db}:${DB_PORT:3308}/${DB_NAME:ai_interview}?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mariadb://${DB_HOST:di-interview-db}:${DB_PORT:3308}/${DB_NAME:ai_interview}?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=true&requireSSL=true&verifyServerCertificate=false
     username: ${DB_USERNAME:admin}
-    password: ${DB_PASSWORD}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
