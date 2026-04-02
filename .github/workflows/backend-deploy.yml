@@ -85,4 +85,3 @@ jobs:
               -e AI_SERVER_URL='http://aimentor-ai-server:8000' \
               $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           "
-          EOF
