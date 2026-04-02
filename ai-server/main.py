@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import os
 load_dotenv()  # 반드시 다른 import보다 먼저 실행
 
 from fastapi import FastAPI
