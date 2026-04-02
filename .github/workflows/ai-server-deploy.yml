@@ -61,12 +61,13 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<EOF
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $REGISTRY
-            docker network create aimentor-net || true
-            docker pull $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-            docker stop aimentor-ai-server || true
-            docker rm aimentor-ai-server || true
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            docker login --username AWS --password-stdin $REGISTRY &&
+            docker network create aimentor-net || true &&
+            docker pull $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG &&
+            docker stop aimentor-ai-server || true &&
+            docker rm aimentor-ai-server || true &&
             docker run -d \
               --name aimentor-ai-server \
               --restart unless-stopped \
@@ -75,4 +76,4 @@ jobs:
               -e OPENAI_API_KEY='${{ secrets.OPENAI_API_KEY }}' \
               -e MODEL_NAME='gpt-4o' \
               $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          EOF
+          "
