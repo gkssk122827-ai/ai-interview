@@ -47,6 +47,7 @@ public class JusoAddressService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(requestUrl))
                     .timeout(Duration.ofSeconds(REQUEST_TIMEOUT_SECONDS))
+                    .header("Accept", "application/json")
                     .GET()
                     .build();
 
