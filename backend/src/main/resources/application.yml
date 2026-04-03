@@ -37,7 +37,7 @@ integration:
   ai:
     provider: ${AI_PROVIDER:python-ai}
     api-key: ${AI_API_KEY:}
-    base-url: ${AI_BASE_URL:http://localhost:8000}
+    base-url: ${AI_BASE_URL:http://aimentor-ai-server:8000}
     model: ${AI_MODEL:gpt-4o}
   speech:
     provider: ${SPEECH_PROVIDER:stub-speech}
