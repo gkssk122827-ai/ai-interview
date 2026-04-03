@@ -1,4 +1,4 @@
-import api from './axios'
+import api, { buildApiUrl } from './axios'
 
 export const generateProblems = (body) =>
   api.post('/api/learning/generate', body)
@@ -62,3 +62,6 @@ export const addInterviewBookmark = (body) =>
 
 export const deleteInterviewBookmark = (bookmarkKey) =>
   api.delete(`/api/learning/bookmarks/${encodeURIComponent(bookmarkKey)}`)
+
+export const getLearningGenerateStreamUrl = () =>
+  buildApiUrl('/api/learning/generate/stream')

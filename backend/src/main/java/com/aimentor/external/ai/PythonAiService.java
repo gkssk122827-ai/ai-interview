@@ -21,11 +21,11 @@ import org.springframework.web.client.RestTemplate;
 public class PythonAiService implements AiService {
 
     private final RestTemplate restTemplate;
-    private final AiServerProperties aiServerProperties;
+    private final String baseUrl;
 
-    public PythonAiService(AiServerProperties aiServerProperties) {
+    public PythonAiService(AiIntegrationProperties properties) {
         this.restTemplate = new RestTemplate();
-        this.aiServerProperties = aiServerProperties;
+        this.baseUrl = properties.baseUrl();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PythonAiService implements AiService {
     ) {
         try {
             ResponseEntity<InterviewQuestionResponse> response = restTemplate.exchange(
-                    aiServerProperties.url() + "/interview/question",
+                    baseUrl + "/interview/question",
                     HttpMethod.POST,
                     new HttpEntity<>(new InterviewQuestionRequest(
                             resumeContent,
@@ -65,7 +65,7 @@ public class PythonAiService implements AiService {
     public FeedbackDto generateFeedback(List<ConversationTurnDto> history) {
         try {
             ResponseEntity<FeedbackDto> response = restTemplate.exchange(
-                    aiServerProperties.url() + "/interview/feedback",
+                    baseUrl + "/interview/feedback",
                     HttpMethod.POST,
                     new HttpEntity<>(new FeedbackRequest(history)),
                     FeedbackDto.class
@@ -80,7 +80,7 @@ public class PythonAiService implements AiService {
     public List<ProblemDto> generateLearningProblems(String subject, String difficulty, int count, String type) {
         try {
             ResponseEntity<LearningGenerateResponse> response = restTemplate.exchange(
-                    aiServerProperties.url() + "/learning/generate",
+                    baseUrl + "/learning/generate",
                     HttpMethod.POST,
                     new HttpEntity<>(new LearningProblemRequest(subject, difficulty, count, type)),
                     LearningGenerateResponse.class
@@ -96,7 +96,7 @@ public class PythonAiService implements AiService {
     public GradeResultDto gradeLearningAnswer(String question, String correctAnswer, String userAnswer, String explanation) {
         try {
             ResponseEntity<GradeResultDto> response = restTemplate.exchange(
-                    aiServerProperties.url() + "/learning/grade",
+                    baseUrl + "/learning/grade",
                     HttpMethod.POST,
                     new HttpEntity<>(new GradeRequest(question, correctAnswer, userAnswer, explanation)),
                     GradeResultDto.class

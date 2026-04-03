@@ -11,5 +11,5 @@ spring:
 integration:
   ai:
     provider: python-ai
-    base-url: http://localhost:8000
+    base-url: ${AI_BASE_URL:http://localhost:8000}
 
